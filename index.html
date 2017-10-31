@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<input type="text" id="ipt" name="">
+
+<input type="submit" id="ipt2">
+
+<div id="div"></div>
+<script src="jquery-1.8.3.min.js">
+
+</script>
+</body>
+</html>
+<script>
+    fu();//先执行
+     $('#ipt2').click(function(){
+         var ipt=$('#ipt').val();
+         if(ipt==''){
+             alert("不能为空")
+         }console.log(ipt);
+         $.ajax({
+             url:'http://localhost:3000/ite/list',
+             type:'post',
+             dataType:'json',
+             data:{val:ipt},
+             success:function(e){
+                fu()
+             }
+         })
+     });
+    function fu(){
+        $.ajax({
+            url:'http://localhost:3000/ite/data',
+            type:'get',
+            dataType:"json",
+            success:function(e){
+                var kong='';
+                for(i in e){
+                    kong+='<div>'+e[i].name+'<span data-id='+e[i].id+'>删除</span></div>'
+                }
+                $('#div').html(kong);
+
+
+                $('span').click(function(){
+                    var id=$(this).attr('data-id');
+                    var suibian=$(this);
+                    $.ajax({
+                        url:'http://localhost:3000/ite/xinqiu',
+                        type:'post',
+                        dataType:'json',
+                        data:{cc:id},
+                        success:function(e){
+                            console.log(e)
+                            suibian.parent().remove()
+                        }
+                    });
+                })
+            }
+        })
+    }
+
+</script>
